@@ -1,10 +1,8 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Color;
+import java.awt.*;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.*;
 
 class Main {
     private static int screen_width = 1920;
@@ -23,12 +21,28 @@ class Main {
         frame.setSize(app_width, app_height);
         frame.setLocation(screen_width-app_width-(app_width/2), screen_height-app_height-(app_height/2)); // centers the app
 
-        // add the JLabel
-        JLabel foodListBox = new JLabel("Teste");
-        foodListBox.setBackground(new Color(222,224,248)); // light blue
-        foodListBox.setOpaque(true);
-        foodListBox.setBounds(720,0,240,540);
-        frame.add(foodListBox);
+        // add the 2 JPanels
+        JPanel rightPanel = new JPanel();
+        rightPanel.setBackground(new Color(222,224,248)); // light blue
+        rightPanel.setOpaque(true);
+        rightPanel.setBounds(720,0,240,540);
+        JPanel leftPanel = new JPanel();
+        leftPanel.setBounds(0, 0, 720, 540);
+        leftPanel.setBackground(new Color(255,0,0)); // red
+        leftPanel.setOpaque(true);
+        FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
+        leftPanel.setLayout(layout);
+        frame.add(rightPanel);
+        frame.add(leftPanel);
+
+        // add buttons to leftPanel
+        JButton b1 = new JButton("1");
+        JButton b2 = new JButton("2");
+        leftPanel.add(b1); leftPanel.add(b2);
+
+
+
+
 
         // adding buttons
         JButton button = new JButton("Food button");
