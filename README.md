@@ -11,3 +11,11 @@ private static int screen_width = 1920;
 private static int screen_height = 1080;
 ```
 
+| File Name | Description |
+| --------- | ----------- |
+| Main.java | The entry point where the main method is |
+| Drink.java | Defines a drink object which is a child of MenuItem |
+| Food.java | Defines a food object which is a child of MenuItem |
+| MenuItem.java | The superclass for all menu items |
+| MenuItemFactory.java | This factory builds all of the MenuItem items |
+| README.md | You\'re reading this right now, so you know what this is. If not, see README.md |
