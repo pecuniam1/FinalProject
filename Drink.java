@@ -1,12 +1,17 @@
-public abstract class Drink extends MenuItem {
+class Drink extends MenuItem {
+    private boolean isAlcohol;
 
-    float getCost() {
-        return 0;
+    public Drink(String name, float cost, boolean isAlcohol) {
+        super.setName(name);
+        super.setCost(cost);
+        setIsAlcohol(isAlcohol);            
     }
 
-    String getName() {
-        return null;
+    private void setIsAlcohol(boolean isAlcohol) {
+        this.isAlcohol = isAlcohol;
     }
 
-    public abstract boolean isAlcohol();
+    public boolean isAlcohol() {
+        return this.isAlcohol;
+    }
 }

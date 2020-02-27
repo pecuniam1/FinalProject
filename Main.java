@@ -1,5 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.*;
 
 import javax.swing.*;
@@ -7,11 +8,18 @@ import javax.swing.*;
 class Main {
     private static int screen_width = 1920;
     private static int screen_height = 1080;
+
     public static void main(String args[]) {
-        getGUI();
+        MenuItemFactory factory = new MenuItemFactory();
+        getGUI(factory);
     }
 
-    private static void getGUI() {
+    private static void getGUI(MenuItemFactory factory) {
+        ArrayList<MenuItem> itemsOrderedArray = new ArrayList<MenuItem>();
+        MenuItem hamburger = factory.getMenuItem("hamburger", 3.75f);
+        MenuItem beer = factory.getMenuItem("beer", 2.50f);
+        System.out.println(hamburger);
+        
         int app_width = screen_width/2;
         int app_height = screen_height/2;
         JFrame.setDefaultLookAndFeelDecorated(true);
@@ -35,30 +43,30 @@ class Main {
         frame.add(rightPanel);
         frame.add(leftPanel);
 
+
+        // add stuff to right layout
+        DefaultListModel<String> li = new DefaultListModel<>();
+        li.addElement(hamburger.toString());
+        li.addElement(beer.toString());
+        JList<String> list = new JList<>(li);
+        list.setBounds(0,0,240,540);
+        rightPanel.add(list);
+
+
         // add buttons to leftPanel
-        JButton b1 = new JButton("1");
-        JButton b2 = new JButton("2");
-        leftPanel.add(b1); leftPanel.add(b2);
-
-
-
-
-
-        // adding buttons
-        JButton button = new JButton("Food button");
-        button.setBounds(50, 50, 100, 100);
-
-        // adding buttons to the JFrame
-        frame.add(button);
+        // for (String food : foods) {
+        //     JButton button = new JButton(food);
+        //     button.addActionListener(new ActionListener() {
+        //         @Override
+        //         public void actionPerformed(ActionEvent e) {
+        //             System.out.println("You selected " + food);
+        //         }
+        //     });
+        //     leftPanel.add(button);
+        // }
         frame.setLayout(null); // change this to something to control layout
         frame.setVisible(true);
 
-        // adding an action listener to button
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // do something
-            }
-        });
+
     }
 }
