@@ -7,6 +7,7 @@ The entry point is Main.java
 ### Total Files
 | File Name | Description |
 | --------- | ----------- |
+| .gitignore | This little guy? I wouldn\'t worry about this little guy |
 | Main.java | The entry point where the main method is |
 | Drink.java | Defines a drink object which is a child of MenuItem |
 | Food.java | Defines a food object which is a child of MenuItem |
