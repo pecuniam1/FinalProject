@@ -148,11 +148,7 @@ class Main {
     }
 
     private static void resetRightPanel(ArrayList<String> itemsOrderedArray, JPanel rightPanel) {
-        for(String food : itemsOrderedArray) {
-            JLabel billItem = new JLabel(food, JLabel.CENTER);
-            billItem.setForeground(Color.WHITE);
-            rightPanel.remove(billItem);
-        }
         itemsOrderedArray.clear();
+        rightPanel.repaint();
     }
 }
