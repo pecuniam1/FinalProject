@@ -15,13 +15,13 @@ class Main {
     }
 
     private static void getGUI(final MenuItemFactory factory) {
-        final ArrayList<MenuItem> itemsOrderedArray = new ArrayList<MenuItem>();
+        final ArrayList<MenuItem> itemsOrderedArray2 = new ArrayList<MenuItem>();
         final MenuItem hamburger = factory.getMenuItem("hamburger", 3.75f);
         final MenuItem beer = factory.getMenuItem("beer", 2.50f);
 
-        ArrayList<String> testStrings = new ArrayList<String>();
-        testStrings.add("hamburger");
-        testStrings.add("hot dog");
+        ArrayList<String> itemsOrderedArray = new ArrayList<String>();
+        itemsOrderedArray.add("hamburger");
+        itemsOrderedArray.add("hot dog");
 
 
         JFrame frame = createFrame();
@@ -33,14 +33,12 @@ class Main {
         frame.setLayout(null);
         frame.setVisible(true);
 
+        itemizeBill(itemsOrderedArray, rightPanel);
+
         // add list to rightPanel.
         // rightPanel.add(new JLabel("name", JLabel.LEFT));
 
-        for(String food : testStrings) {
-            JLabel billItem = new JLabel(food, JLabel.CENTER);
-            billItem.setForeground(Color.WHITE);
-            rightPanel.add(billItem);
-        }
+
         //does not work
      
         // add stuff to right layout
@@ -59,8 +57,7 @@ class Main {
         //     public void actionPerformed(final ActionEvent e) {
         //         System.out.println(list);
         //         list = null;
-        //         rightPanel.revalidate();
-        //         rightPanel.repaint();
+
         //         System.out.println("buton pressed");
         //         System.out.println(list);
         //     }
@@ -94,12 +91,18 @@ class Main {
         return leftPanel;
     }
 
+    /**
+     * This function creates the right panel that holds
+     * the ongoing list of menu items. It also holds the
+     * 'Cancel Order' and 'Close Out' buttons.
+     * @return
+     */
     private static JPanel createRightPanel() {
         final JPanel rightPanel = new JPanel();
         rightPanel.setBounds(720, 0, 240, 540);
         rightPanel.setBackground(new Color(0,0,255)); // blue
         rightPanel.setOpaque(true);
-        final GridLayout layout = new GridLayout(2, 2);
+        final GridLayout layout = new GridLayout(4, 1);
         rightPanel.setLayout(layout);
         return rightPanel;
     }
@@ -114,5 +117,42 @@ class Main {
         frame.setSize(app_width, app_height);
         frame.setLocation(screen_width-app_width-(app_width/2), screen_height-app_height-(app_height/2)); // centers the app
         return frame;
+    }
+
+    private static void itemizeBill(ArrayList<String> itemsOrderedArray, JPanel rightPanel) {
+        for(String food : itemsOrderedArray) {
+            JLabel billItem = new JLabel(food, JLabel.CENTER);
+            billItem.setForeground(Color.WHITE);
+            rightPanel.add(billItem);
+        }
+        JButton completeOrderButton = new JButton("Complete Order");
+        completeOrderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("You selected complete order");
+            }
+        });
+        JButton startOverButton = new JButton("Start Over");
+        startOverButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("You selected start over");
+                System.out.println(itemsOrderedArray);
+                resetRightPanel(itemsOrderedArray, rightPanel);
+
+            }
+        });
+
+        rightPanel.add(completeOrderButton);
+        rightPanel.add(startOverButton);
+    }
+
+    private static void resetRightPanel(ArrayList<String> itemsOrderedArray, JPanel rightPanel) {
+        for(String food : itemsOrderedArray) {
+            JLabel billItem = new JLabel(food, JLabel.CENTER);
+            billItem.setForeground(Color.WHITE);
+            rightPanel.remove(billItem);
+        }
+        itemsOrderedArray.clear();
     }
 }
