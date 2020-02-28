@@ -25,15 +25,22 @@ class Main {
 
 
         JFrame frame = createFrame();
+        Insets insets = frame.getInsets();
+        int titleBarSize = insets.top;
+
+        
         JPanel leftPanel = createLeftPanel();
         JPanel rightPanel = createRightPanel();
+        JPanel bottomPanel = createBottomPanel();
+
         // add panels to frame
         frame.add(rightPanel);
         frame.add(leftPanel);
+        frame.add(bottomPanel);
         frame.setLayout(null);
         frame.setVisible(true);
 
-        itemizeBill(itemsOrderedArray, rightPanel);
+        // itemizeBill(itemsOrderedArray, rightPanel);
 
         // add list to rightPanel.
         // rightPanel.add(new JLabel("name", JLabel.LEFT));
@@ -81,6 +88,8 @@ class Main {
 
     }
 
+    // figure out how big title bar is
+
     private static JPanel createLeftPanel() {
         final JPanel leftPanel = new JPanel();
         leftPanel.setBounds(0, 0, 720, 540);
@@ -99,11 +108,20 @@ class Main {
      */
     private static JPanel createRightPanel() {
         final JPanel rightPanel = new JPanel();
-        rightPanel.setBounds(720, 0, 240, 540);
+        rightPanel.setBounds(720, 0, 240, 440);
         rightPanel.setBackground(new Color(0,0,255)); // blue
         rightPanel.setOpaque(true);
         final GridLayout layout = new GridLayout(4, 1);
         rightPanel.setLayout(layout);
+        return rightPanel;
+    }
+
+    private static JPanel createBottomPanel() {
+        final JPanel rightPanel = new JPanel();
+        rightPanel.setBounds(720, 440, 240, 100);
+        rightPanel.setBackground(new Color(0,255,0)); // green
+        rightPanel.setOpaque(true);
+        rightPanel.setLayout(null);
         return rightPanel;
     }
 
@@ -119,36 +137,36 @@ class Main {
         return frame;
     }
 
-    private static void itemizeBill(ArrayList<String> itemsOrderedArray, JPanel rightPanel) {
-        for(String food : itemsOrderedArray) {
-            JLabel billItem = new JLabel(food, JLabel.CENTER);
-            billItem.setForeground(Color.WHITE);
-            rightPanel.add(billItem);
-        }
-        JButton completeOrderButton = new JButton("Complete Order");
-        completeOrderButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("You selected complete order");
-            }
-        });
-        JButton startOverButton = new JButton("Start Over");
-        startOverButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("You selected start over");
-                System.out.println(itemsOrderedArray);
-                resetRightPanel(itemsOrderedArray, rightPanel);
+    // private static void itemizeBill(ArrayList<String> itemsOrderedArray, JPanel rightPanel) {
+    //     for(String food : itemsOrderedArray) {
+    //         JLabel billItem = new JLabel(food, JLabel.CENTER);
+    //         billItem.setForeground(Color.WHITE);
+    //         rightPanel.add(billItem);
+    //     }
+    //     JButton completeOrderButton = new JButton("Complete Order");
+    //     completeOrderButton.addActionListener(new ActionListener() {
+    //         @Override
+    //         public void actionPerformed(ActionEvent e) {
+    //             System.out.println("You selected complete order");
+    //         }
+    //     });
+    //     JButton startOverButton = new JButton("Start Over");
+    //     startOverButton.addActionListener(new ActionListener() {
+    //         @Override
+    //         public void actionPerformed(ActionEvent e) {
+    //             System.out.println("You selected start over");
+    //             System.out.println(itemsOrderedArray);
+    //             resetRightPanel(itemsOrderedArray, rightPanel);
 
-            }
-        });
+    //         }
+    //     });
 
-        rightPanel.add(completeOrderButton);
-        rightPanel.add(startOverButton);
-    }
+    //     rightPanel.add(completeOrderButton);
+    //     rightPanel.add(startOverButton);
+    // }
 
-    private static void resetRightPanel(ArrayList<String> itemsOrderedArray, JPanel rightPanel) {
-        itemsOrderedArray.clear();
-        rightPanel.repaint();
-    }
+    // private static void resetRightPanel(ArrayList<String> itemsOrderedArray, JPanel rightPanel) {
+    //     itemsOrderedArray.clear();
+    //     rightPanel.repaint();
+    // }
 }
