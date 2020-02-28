@@ -16,8 +16,9 @@ class Main {
 
     private static void getGUI(final MenuItemFactory factory) {
         final ArrayList<MenuItem> itemsOrderedArray2 = new ArrayList<MenuItem>();
-        final MenuItem hamburger = factory.getMenuItem("hamburger", 3.75f);
-        final MenuItem beer = factory.getMenuItem("beer", 2.50f);
+        MenuItem hamburger = factory.getMenuItem("Hamburger", 3.75f, MenuItem.FOOD);
+        MenuItem beer = factory.getMenuItem("Beer", 2.50f, MenuItem.ALCOHOL);
+        MenuItem pepsi = factory.getMenuItem("Pepsi", 2.50f, MenuItem.SOFT_DRINK);
 
         ArrayList<String> itemsOrderedArray = new ArrayList<String>();
         itemsOrderedArray.add("hamburger");
