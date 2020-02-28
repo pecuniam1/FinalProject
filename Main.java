@@ -9,48 +9,64 @@ class Main {
     private static int screen_width = 1920;
     private static int screen_height = 1080;
 
-    public static void main(String args[]) {
-        MenuItemFactory factory = new MenuItemFactory();
+    public static void main(final String args[]) {
+        final MenuItemFactory factory = new MenuItemFactory();
         getGUI(factory);
     }
 
-    private static void getGUI(MenuItemFactory factory) {
-        ArrayList<MenuItem> itemsOrderedArray = new ArrayList<MenuItem>();
-        MenuItem hamburger = factory.getMenuItem("hamburger", 3.75f);
-        MenuItem beer = factory.getMenuItem("beer", 2.50f);
-        System.out.println(hamburger);
-        
-        int app_width = screen_width/2;
-        int app_height = screen_height/2;
-        JFrame.setDefaultLookAndFeelDecorated(true);
-        JFrame frame = new JFrame("Menu Application");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("Kevin POS");
-        frame.setSize(app_width, app_height);
-        frame.setLocation(screen_width-app_width-(app_width/2), screen_height-app_height-(app_height/2)); // centers the app
+    private static void getGUI(final MenuItemFactory factory) {
+        final ArrayList<MenuItem> itemsOrderedArray = new ArrayList<MenuItem>();
+        final MenuItem hamburger = factory.getMenuItem("hamburger", 3.75f);
+        final MenuItem beer = factory.getMenuItem("beer", 2.50f);
 
-        // add the 2 JPanels
-        JPanel rightPanel = new JPanel();
-        rightPanel.setBackground(new Color(222,224,248)); // light blue
-        rightPanel.setOpaque(true);
-        rightPanel.setBounds(720,0,240,540);
-        JPanel leftPanel = new JPanel();
-        leftPanel.setBounds(0, 0, 720, 540);
-        leftPanel.setBackground(new Color(255,0,0)); // red
-        leftPanel.setOpaque(true);
-        FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
-        leftPanel.setLayout(layout);
+        ArrayList<String> testStrings = new ArrayList<String>();
+        testStrings.add("hamburger");
+        testStrings.add("hot dog");
+
+
+        JFrame frame = createFrame();
+        JPanel leftPanel = createLeftPanel();
+        JPanel rightPanel = createRightPanel();
+        // add panels to frame
         frame.add(rightPanel);
         frame.add(leftPanel);
+        frame.setLayout(null);
+        frame.setVisible(true);
 
+        // add list to rightPanel.
+        // rightPanel.add(new JLabel("name", JLabel.LEFT));
 
+        for(String food : testStrings) {
+            JLabel billItem = new JLabel(food, JLabel.CENTER);
+            billItem.setForeground(Color.WHITE);
+            rightPanel.add(billItem);
+        }
+        //does not work
+     
         // add stuff to right layout
-        DefaultListModel<String> li = new DefaultListModel<>();
-        li.addElement(hamburger.toString());
-        li.addElement(beer.toString());
-        JList<String> list = new JList<>(li);
-        list.setBounds(0,0,240,540);
-        rightPanel.add(list);
+        // final DefaultListModel<String> li = new DefaultListModel<>();
+        // li.addElement(hamburger.toString());
+        // li.addElement(beer.toString());
+        // JList<String> list = new JList<>(li);
+        // list.setBounds(0,0,0,0);
+        // rightPanel.add(list);
+        
+
+        // add buttons to right panel
+        // final JButton startOverButton = new JButton("Start Over");
+        // startOverButton.addActionListener(new ActionListener() {
+        //     @Override
+        //     public void actionPerformed(final ActionEvent e) {
+        //         System.out.println(list);
+        //         list = null;
+        //         rightPanel.revalidate();
+        //         rightPanel.repaint();
+        //         System.out.println("buton pressed");
+        //         System.out.println(list);
+        //     }
+        // });
+        // startOverButton.setBounds(0,0,0,0);
+        // rightPanel.add(startOverButton);
 
 
         // add buttons to leftPanel
@@ -64,9 +80,39 @@ class Main {
         //     });
         //     leftPanel.add(button);
         // }
-        frame.setLayout(null); // change this to something to control layout
-        frame.setVisible(true);
 
 
+    }
+
+    private static JPanel createLeftPanel() {
+        final JPanel leftPanel = new JPanel();
+        leftPanel.setBounds(0, 0, 720, 540);
+        leftPanel.setBackground(new Color(255,0,0)); // red
+        leftPanel.setOpaque(true);
+        final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
+        leftPanel.setLayout(layout);
+        return leftPanel;
+    }
+
+    private static JPanel createRightPanel() {
+        final JPanel rightPanel = new JPanel();
+        rightPanel.setBounds(720, 0, 240, 540);
+        rightPanel.setBackground(new Color(0,0,255)); // blue
+        rightPanel.setOpaque(true);
+        final GridLayout layout = new GridLayout(2, 2);
+        rightPanel.setLayout(layout);
+        return rightPanel;
+    }
+
+    private static JFrame createFrame() {
+        final int app_width = screen_width/2;
+        final int app_height = screen_height/2;
+        final JFrame frame =  new JFrame();
+        JFrame.setDefaultLookAndFeelDecorated(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setTitle("Kevin POS");
+        frame.setSize(app_width, app_height);
+        frame.setLocation(screen_width-app_width-(app_width/2), screen_height-app_height-(app_height/2)); // centers the app
+        return frame;
     }
 }
