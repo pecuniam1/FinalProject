@@ -107,13 +107,7 @@ class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (item.isAlcohol()) {
-                    Date today = new Date();
-                    Calendar calendar = new GregorianCalendar();
-                    calendar.setTime(today);
-                    calendar.add(Calendar.YEAR, -21);
-                    Date old_enough = calendar.getTime();
-                    SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy");
-                    String date = sdf.format(old_enough);
+                    String date = getOldEnoughDate();
                     int input = JOptionPane.showConfirmDialog(null, "Was this person born on or after " + date + "?");
                     if (input != 0) { // 0 = yes
                         return;
@@ -125,6 +119,19 @@ class Main {
             }
         });
         panel.add(button);
+    }
+    
+    /** This function will calculate and return the date 21 years ago from today.
+     * @return The date 21 years ago.
+     */
+    private static String getOldEnoughDate() {
+        Date today = new Date();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(today);
+        calendar.add(Calendar.YEAR, -21);
+        Date old_enough = calendar.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy");
+        return sdf.format(old_enough);
     }
 
     /** This function creates the buttons.
