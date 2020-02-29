@@ -30,9 +30,10 @@ class Main {
         int titleBarSize = insets.top;
 
         
-        JPanel leftPanel = createLeftPanel();
-        JPanel rightPanel = createRightPanel();
-        JPanel bottomPanel = createBottomPanel();
+        JPanel leftPanel = createPanel(new Rectangle(0, 0, 720, 540), Color.RED, new FlowLayout(FlowLayout.LEFT));
+        JPanel rightPanel = createPanel(new Rectangle(720, 0, 240, 440), Color.BLUE, new GridLayout(4, 1));
+        JPanel bottomPanel = createPanel(new Rectangle(720, 440, 240, 100), Color.GREEN, null);
+
 
         // add panels to frame
         frame.add(rightPanel);
@@ -90,41 +91,21 @@ class Main {
     }
 
     // figure out how big title bar is
-
-    private static JPanel createLeftPanel() {
-        final JPanel leftPanel = new JPanel();
-        leftPanel.setBounds(0, 0, 720, 540);
-        leftPanel.setBackground(new Color(255,0,0)); // red
-        leftPanel.setOpaque(true);
-        final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
-        leftPanel.setLayout(layout);
-        return leftPanel;
+	/** This function creates the right, left, and bottm panels that hold the bill, order buttons, and execute buttons.
+	 * @param rectangle The dimensions of the panel.
+	 * @param color The color of the panel.
+	 * @param layout The layout of the panel.
+	 * @return The new panel.
+	 */
+    private static JPanel createPanel(Rectangle rectangle, Color color, LayoutManager layout) {
+        final JPanel panel = new JPanel();
+        panel.setBounds(rectangle);
+        panel.setBackground(color);
+        panel.setOpaque(true);
+        panel.setLayout(layout);
+        return panel;
     }
 
-    /**
-     * This function creates the right panel that holds
-     * the ongoing list of menu items. It also holds the
-     * 'Cancel Order' and 'Close Out' buttons.
-     * @return
-     */
-    private static JPanel createRightPanel() {
-        final JPanel rightPanel = new JPanel();
-        rightPanel.setBounds(720, 0, 240, 440);
-        rightPanel.setBackground(new Color(0,0,255)); // blue
-        rightPanel.setOpaque(true);
-        final GridLayout layout = new GridLayout(4, 1);
-        rightPanel.setLayout(layout);
-        return rightPanel;
-    }
-
-    private static JPanel createBottomPanel() {
-        final JPanel rightPanel = new JPanel();
-        rightPanel.setBounds(720, 440, 240, 100);
-        rightPanel.setBackground(new Color(0,255,0)); // green
-        rightPanel.setOpaque(true);
-        rightPanel.setLayout(null);
-        return rightPanel;
-    }
 
     private static JFrame createFrame() {
         final int app_width = screen_width/2;
@@ -136,7 +117,15 @@ class Main {
         frame.setSize(app_width, app_height);
         frame.setLocation(screen_width-app_width-(app_width/2), screen_height-app_height-(app_height/2)); // centers the app
         return frame;
-    }
+	}
+	
+	/** This function will return the whole menu as an ArrayList. 
+	 * @return The whole menu as an ArrayList
+	 */
+	private String getFullMenu() {
+		String hotdog = "hot dog";
+		return hotdog;
+	}
 
     // private static void itemizeBill(ArrayList<String> itemsOrderedArray, JPanel rightPanel) {
     //     for(String food : itemsOrderedArray) {
