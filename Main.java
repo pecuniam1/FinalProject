@@ -1,6 +1,10 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.awt.*;
 
 import javax.swing.*;
@@ -10,7 +14,7 @@ class Main {
     private static int screen_height = 1080;
     private static final int CANCEL_ORDER = 0;
     private static final int CHECK_OUT = 1;
-    private static final float TAX_PERCENT = 0.35f;
+    private static final float TAX_PERCENT = 0.035f;
     private static ArrayList<MenuItem> itemsOrderedArray = new ArrayList<MenuItem>();
     private static ArrayList<MenuItem> totalMenuItems = new ArrayList<MenuItem>();
 
@@ -21,21 +25,20 @@ class Main {
     private static void getGUI() {
         getFullMenu();
         JFrame frame = createFrame();
-        
+
         JPanel leftPanel = createPanel(new Rectangle(0, 0, 720, 500), Color.RED, new FlowLayout(FlowLayout.LEFT));
         JPanel rightPanel = createPanel(new Rectangle(720, 0, 220, 400), Color.BLUE, new GridLayout(4, 1));
         JPanel pricePanel = createPanel(new Rectangle(720, 400, 220, 50), Color.MAGENTA, new GridLayout(3, 0));
         JPanel bottomPanel = createPanel(new Rectangle(720, 450, 220, 50), Color.GREEN, new FlowLayout());
         populateMenu(leftPanel, pricePanel);
 
-        
         // add buttons
         addBottomButton("Cancel Order", Main.CANCEL_ORDER, bottomPanel);
         addBottomButton("Close Out", Main.CHECK_OUT, bottomPanel);
-        
+
         // add stuff to price panel
         addPrices(pricePanel);
-        
+
         // add panels to frame
         frame.add(rightPanel);
         frame.add(leftPanel);
@@ -43,16 +46,14 @@ class Main {
         frame.add(bottomPanel);
         frame.setLayout(null);
         frame.setVisible(true);
-        
-        
+
         // itemizeBill(itemsOrderedArray, rightPanel);
 
         // add list to rightPanel.
         // rightPanel.add(new JLabel("name", JLabel.LEFT));
 
+        // does not work
 
-        //does not work
-     
         // add stuff to right layout
         // final DefaultListModel<String> li = new DefaultListModel<>();
         // li.addElement(hamburger.toString());
@@ -78,7 +79,7 @@ class Main {
         pricesArray.add(String.format("Pre Tax ........     $%.2f", totalPrice));
         pricesArray.add(String.format("Tax ..............     $%.2f", totalTax));
         pricesArray.add(String.format("Post Tax ......     $%.2f", totalPriceAfterTaxes));
-        for(String price : pricesArray) {
+        for (String price : pricesArray) {
             JLabel label = new JLabel(price);
             label.setFont(new Font("Arial", Font.PLAIN, 18));
             panel.add(label);
@@ -86,14 +87,16 @@ class Main {
     }
 
     private static void populateMenu(JPanel leftPanel, JPanel pricePanel) {
-        for(MenuItem item : totalMenuItems) {
+        for (MenuItem item : totalMenuItems) {
             System.out.println(item);
             addMenuButton(item, leftPanel, pricePanel);
-            //addPrices(pricePanel);
+            // addPrices(pricePanel);
         }
     }
 
-    /** This function adds the menu buttons to the left panel.
+    /**
+     * This function adds the menu buttons to the left panel.
+     * 
      * @param item The item being added.
      */
     private static void addMenuButton(MenuItem item, JPanel panel, JPanel pricePanel) {
@@ -103,6 +106,19 @@ class Main {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (item.isAlcohol()) {
+                    Date today = new Date();
+                    Calendar calendar = new GregorianCalendar();
+                    calendar.setTime(today);
+                    calendar.add(Calendar.YEAR, -21);
+                    Date old_enough = calendar.getTime();
+                    SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy");
+                    String date = sdf.format(old_enough);
+                    int input = JOptionPane.showConfirmDialog(null, "Was this person born on or after " + date + "?");
+                    if (input != 0) { // 0 = yes
+                        return;
+                    }
+                }
                 itemsOrderedArray.add(item);
                 addPrices(pricePanel);
                 System.out.println(item);

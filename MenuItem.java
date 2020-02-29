@@ -42,7 +42,11 @@ public class MenuItem {
 
     public String getName() {
         return this.name;
-    }
+	}
+	
+	public boolean isAlcohol() {
+		return false;
+	}
 
     public String toString() {
         return String.format("%s $%.2f", this.name, this.cost);

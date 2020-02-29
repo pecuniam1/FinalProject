@@ -19,6 +19,10 @@ class Drink extends MenuItem {
         this.isAlcohol = isAlcohol;
     }
 
+    public boolean getIsAlcohol() {
+        return isAlcohol;
+    }
+
     public boolean isAlcohol() {
         return this.isAlcohol;
     }
