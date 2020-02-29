@@ -45,6 +45,6 @@ public class MenuItem {
     }
 
     public String toString() {
-        return this.name + " $" + this.cost;
+        return String.format("%s $%.2f", this.name, this.cost);
     }
 }

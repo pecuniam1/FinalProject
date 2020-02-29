@@ -8,40 +8,43 @@ import javax.swing.*;
 class Main {
     private static int screen_width = 1920;
     private static int screen_height = 1080;
+    private static final int CANCEL_ORDER = 0;
+    private static final int CHECK_OUT = 1;
+    private static final float TAX_PERCENT = 0.35f;
+    private static ArrayList<MenuItem> itemsOrderedArray = new ArrayList<MenuItem>();
+    private static ArrayList<MenuItem> totalMenuItems = new ArrayList<MenuItem>();
 
     public static void main(final String args[]) {
-        final MenuItemFactory factory = new MenuItemFactory();
-        getGUI(factory);
+        getGUI();
     }
 
-    private static void getGUI(final MenuItemFactory factory) {
-        final ArrayList<MenuItem> itemsOrderedArray2 = new ArrayList<MenuItem>();
-        MenuItem hamburger = factory.getMenuItem("Hamburger", 3.75f, MenuItem.FOOD);
-        MenuItem beer = factory.getMenuItem("Beer", 2.50f, MenuItem.ALCOHOL);
-        MenuItem pepsi = factory.getMenuItem("Pepsi", 2.50f, MenuItem.SOFT_DRINK);
-
-        ArrayList<String> itemsOrderedArray = new ArrayList<String>();
-        itemsOrderedArray.add("hamburger");
-        itemsOrderedArray.add("hot dog");
-
-
+    private static void getGUI() {
+        getFullMenu();
         JFrame frame = createFrame();
-        Insets insets = frame.getInsets();
-        int titleBarSize = insets.top;
+        
+        JPanel leftPanel = createPanel(new Rectangle(0, 0, 720, 500), Color.RED, new FlowLayout(FlowLayout.LEFT));
+        JPanel rightPanel = createPanel(new Rectangle(720, 0, 220, 400), Color.BLUE, new GridLayout(4, 1));
+        JPanel pricePanel = createPanel(new Rectangle(720, 400, 220, 50), Color.MAGENTA, new GridLayout(3, 0));
+        JPanel bottomPanel = createPanel(new Rectangle(720, 450, 220, 50), Color.GREEN, new FlowLayout());
+        populateMenu(leftPanel, pricePanel);
 
         
-        JPanel leftPanel = createPanel(new Rectangle(0, 0, 720, 540), Color.RED, new FlowLayout(FlowLayout.LEFT));
-        JPanel rightPanel = createPanel(new Rectangle(720, 0, 240, 440), Color.BLUE, new GridLayout(4, 1));
-        JPanel bottomPanel = createPanel(new Rectangle(720, 440, 240, 100), Color.GREEN, null);
-
-
+        // add buttons
+        addBottomButton("Cancel Order", Main.CANCEL_ORDER, bottomPanel);
+        addBottomButton("Close Out", Main.CHECK_OUT, bottomPanel);
+        
+        // add stuff to price panel
+        addPrices(pricePanel);
+        
         // add panels to frame
         frame.add(rightPanel);
         frame.add(leftPanel);
+        frame.add(pricePanel);
         frame.add(bottomPanel);
         frame.setLayout(null);
         frame.setVisible(true);
-
+        
+        
         // itemizeBill(itemsOrderedArray, rightPanel);
 
         // add list to rightPanel.
@@ -57,40 +60,88 @@ class Main {
         // JList<String> list = new JList<>(li);
         // list.setBounds(0,0,0,0);
         // rightPanel.add(list);
-        
-
-        // add buttons to right panel
-        // final JButton startOverButton = new JButton("Start Over");
-        // startOverButton.addActionListener(new ActionListener() {
-        //     @Override
-        //     public void actionPerformed(final ActionEvent e) {
-        //         System.out.println(list);
-        //         list = null;
-
-        //         System.out.println("buton pressed");
-        //         System.out.println(list);
-        //     }
-        // });
-        // startOverButton.setBounds(0,0,0,0);
-        // rightPanel.add(startOverButton);
-
-
-        // add buttons to leftPanel
-        // for (String food : foods) {
-        //     JButton button = new JButton(food);
-        //     button.addActionListener(new ActionListener() {
-        //         @Override
-        //         public void actionPerformed(ActionEvent e) {
-        //             System.out.println("You selected " + food);
-        //         }
-        //     });
-        //     leftPanel.add(button);
-        // }
-
-
     }
 
-    // figure out how big title bar is
+    private static void addPrices(JPanel panel) {
+        panel.removeAll();
+        panel.revalidate();
+        panel.repaint();
+        float totalPrice = 0f;
+        float totalPriceAfterTaxes = 0f;
+        float totalTax = 0f;
+        for (MenuItem item : itemsOrderedArray) {
+            totalPrice += item.getCost();
+        }
+        totalTax = totalPrice * Main.TAX_PERCENT;
+        totalPriceAfterTaxes = totalTax + totalPrice;
+        ArrayList<String> pricesArray = new ArrayList<>();
+        pricesArray.add(String.format("Pre Tax ........     $%.2f", totalPrice));
+        pricesArray.add(String.format("Tax ..............     $%.2f", totalTax));
+        pricesArray.add(String.format("Post Tax ......     $%.2f", totalPriceAfterTaxes));
+        for(String price : pricesArray) {
+            JLabel label = new JLabel(price);
+            label.setFont(new Font("Arial", Font.PLAIN, 18));
+            panel.add(label);
+        }
+    }
+
+    private static void populateMenu(JPanel leftPanel, JPanel pricePanel) {
+        for(MenuItem item : totalMenuItems) {
+            System.out.println(item);
+            addMenuButton(item, leftPanel, pricePanel);
+            //addPrices(pricePanel);
+        }
+    }
+
+    /** This function adds the menu buttons to the left panel.
+     * @param item The item being added.
+     */
+    private static void addMenuButton(MenuItem item, JPanel panel, JPanel pricePanel) {
+        JButton button = new JButton(item.getName());
+        button.setMargin(new Insets(10, 20, 10, 20));
+        button.setFont(new Font("Arial", Font.PLAIN, 30));
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                itemsOrderedArray.add(item);
+                addPrices(pricePanel);
+                System.out.println(item);
+            }
+        });
+        panel.add(button);
+    }
+
+    /** This function creates the buttons.
+     * 
+     * @param label The button lable.
+     * @param panel The panel to which the buttons are being added.
+     */
+    private static void addBottomButton(String label, int button_type, JPanel bottomPanel) {
+        JButton button = new JButton(label);
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                switch (button_type) {
+                    case Main.CHECK_OUT:
+                        orderCheckout();
+                        break;
+                    case Main.CANCEL_ORDER:
+                        itemsOrderedArray.clear();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        bottomPanel.add(button);
+    }
+    /** This order is called when the checkout order button is pressed.
+     * 
+     */
+    private static void orderCheckout() {
+        System.out.println("Checking out!");
+    }
+
 	/** This function creates the right, left, and bottm panels that hold the bill, order buttons, and execute buttons.
 	 * @param rectangle The dimensions of the panel.
 	 * @param color The color of the panel.
@@ -106,7 +157,9 @@ class Main {
         return panel;
     }
 
-
+    /** This function creates the frame that the application lives in.
+     * @return The created JFrame.
+     */
     private static JFrame createFrame() {
         final int app_width = screen_width/2;
         final int app_height = screen_height/2;
@@ -119,44 +172,32 @@ class Main {
         return frame;
 	}
 	
-	/** This function will return the whole menu as an ArrayList. 
-	 * @return The whole menu as an ArrayList
-	 */
-	private String getFullMenu() {
-		String hotdog = "hot dog";
-		return hotdog;
-	}
+    
+    private static void itemizeBill(ArrayList<String> itemsOrderedArray, JPanel rightPanel) {
+        for(String food : itemsOrderedArray) {
+            JLabel billItem = new JLabel(food, JLabel.CENTER);
+            billItem.setForeground(Color.WHITE);
+            rightPanel.add(billItem);
+        }
+    }
 
-    // private static void itemizeBill(ArrayList<String> itemsOrderedArray, JPanel rightPanel) {
-    //     for(String food : itemsOrderedArray) {
-    //         JLabel billItem = new JLabel(food, JLabel.CENTER);
-    //         billItem.setForeground(Color.WHITE);
-    //         rightPanel.add(billItem);
-    //     }
-    //     JButton completeOrderButton = new JButton("Complete Order");
-    //     completeOrderButton.addActionListener(new ActionListener() {
-    //         @Override
-    //         public void actionPerformed(ActionEvent e) {
-    //             System.out.println("You selected complete order");
-    //         }
-    //     });
-    //     JButton startOverButton = new JButton("Start Over");
-    //     startOverButton.addActionListener(new ActionListener() {
-    //         @Override
-    //         public void actionPerformed(ActionEvent e) {
-    //             System.out.println("You selected start over");
-    //             System.out.println(itemsOrderedArray);
-    //             resetRightPanel(itemsOrderedArray, rightPanel);
-
-    //         }
-    //     });
-
-    //     rightPanel.add(completeOrderButton);
-    //     rightPanel.add(startOverButton);
-    // }
-
-    // private static void resetRightPanel(ArrayList<String> itemsOrderedArray, JPanel rightPanel) {
-    //     itemsOrderedArray.clear();
-    //     rightPanel.repaint();
-    // }
+    /** This function will set the whole menu.
+     * This function mimics what would happen if I were
+     * querying a database, but it would be in a loop.
+     * It is populating the totalMenuItems ArrayList.
+    */
+    private static void getFullMenu() {
+        MenuItemFactory factory = new MenuItemFactory();
+        totalMenuItems.add(factory.getMenuItem("Hot Dog", 2.99f, MenuItem.FOOD));
+        totalMenuItems.add(factory.getMenuItem("Hamburger", 3.79f, MenuItem.FOOD));
+        totalMenuItems.add(factory.getMenuItem("Gyros", 4.29f, MenuItem.FOOD));
+        totalMenuItems.add(factory.getMenuItem("Pepsi", 1.99f, MenuItem.SOFT_DRINK));
+        totalMenuItems.add(factory.getMenuItem("Diet Pepsi", 1.99f, MenuItem.SOFT_DRINK));
+        totalMenuItems.add(factory.getMenuItem("Sprite", 1.99f, MenuItem.SOFT_DRINK));
+        totalMenuItems.add(factory.getMenuItem("Regular Coffee", 2.49f, MenuItem.SOFT_DRINK));
+        totalMenuItems.add(factory.getMenuItem("Decafe Coffee", 2.49f, MenuItem.SOFT_DRINK));
+        totalMenuItems.add(factory.getMenuItem("Beer", 5.99f, MenuItem.ALCOHOL));
+        totalMenuItems.add(factory.getMenuItem("Red Wine", 7.99f, MenuItem.ALCOHOL));
+        totalMenuItems.add(factory.getMenuItem("White Wine", 7.99f, MenuItem.ALCOHOL));
+    }
 }
