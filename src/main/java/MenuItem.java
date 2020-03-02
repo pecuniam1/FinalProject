@@ -1,3 +1,4 @@
+package src.main.java;
 /** This is the MenuItem superclass that extends to all menu items including food and drinks.
  * @author Kevin J. Kelly
  * @version 2.5
