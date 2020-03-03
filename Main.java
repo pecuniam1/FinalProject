@@ -10,13 +10,15 @@ import java.awt.*;
 import javax.swing.*;
 
 class Main {
-    private static int screen_width = 1920;
-    private static int screen_height = 1080;
+    public static int SCREEN_WIDTH = 1920;
+    public static int SCREEN_HEIGHT = 1080;
     private static final int CANCEL_ORDER = 0;
     private static final int CHECK_OUT = 1;
     private static final float TAX_PERCENT = 0.035f;
     private static ArrayList<MenuItem> itemsOrderedArray = new ArrayList<MenuItem>();
     private static ArrayList<MenuItem> totalMenuItems = new ArrayList<MenuItem>();
+    private static ArrayList<String> pricesArray = new ArrayList<>();
+
 
     public static void main(final String args[]) {
         getGUI();
@@ -33,8 +35,8 @@ class Main {
         populateMenu(leftPanel, pricePanel);
 
         // add buttons
-        addBottomButton("Cancel Order", Main.CANCEL_ORDER, bottomPanel);
-        addBottomButton("Close Out", Main.CHECK_OUT, bottomPanel);
+        addBottomButton("Cancel Order", Main.CANCEL_ORDER, bottomPanel, pricePanel);
+        addBottomButton("Close Out", Main.CHECK_OUT, bottomPanel, pricePanel);
 
         // add stuff to price panel
         addPrices(pricePanel);
@@ -63,6 +65,9 @@ class Main {
         // rightPanel.add(list);
     }
 
+    /** This function updates the total prices.
+     * @param panel The panel being updated (pricePanel in this case).
+     */
     private static void addPrices(JPanel panel) {
         panel.removeAll();
         panel.revalidate();
@@ -75,7 +80,8 @@ class Main {
         }
         totalTax = totalPrice * Main.TAX_PERCENT;
         totalPriceAfterTaxes = totalTax + totalPrice;
-        ArrayList<String> pricesArray = new ArrayList<>();
+
+        pricesArray.clear();
         pricesArray.add(String.format("Pre Tax ........     $%.2f", totalPrice));
         pricesArray.add(String.format("Tax ..............     $%.2f", totalTax));
         pricesArray.add(String.format("Post Tax ......     $%.2f", totalPriceAfterTaxes));
@@ -121,35 +127,24 @@ class Main {
         panel.add(button);
     }
     
-    /** This function will calculate and return the date 21 years ago from today.
-     * @return The date 21 years ago.
-     */
-    private static String getOldEnoughDate() {
-        Date today = new Date();
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(today);
-        calendar.add(Calendar.YEAR, -21);
-        Date old_enough = calendar.getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy");
-        return sdf.format(old_enough);
-    }
 
     /** This function creates the buttons.
      * 
      * @param label The button lable.
      * @param panel The panel to which the buttons are being added.
      */
-    private static void addBottomButton(String label, int button_type, JPanel bottomPanel) {
+    private static void addBottomButton(String label, int button_type, JPanel bottomPanel, JPanel pricePanel) {
         JButton button = new JButton(label);
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 switch (button_type) {
                     case Main.CHECK_OUT:
-                        orderCheckout();
+                        new OrderCheckout();
                         break;
                     case Main.CANCEL_ORDER:
                         itemsOrderedArray.clear();
+                        addPrices(pricePanel);
                         break;
                     default:
                         break;
@@ -158,12 +153,6 @@ class Main {
         });
         bottomPanel.add(button);
     }
-    /** This order is called when the checkout order button is pressed.
-     * 
-     */
-    private static void orderCheckout() {
-        System.out.println("Checking out!");
-    }
 
 	/** This function creates the right, left, and bottm panels that hold the bill, order buttons, and execute buttons.
 	 * @param rectangle The dimensions of the panel.
@@ -171,7 +160,7 @@ class Main {
 	 * @param layout The layout of the panel.
 	 * @return The new panel.
 	 */
-    private static JPanel createPanel(Rectangle rectangle, Color color, LayoutManager layout) {
+    public static JPanel createPanel(Rectangle rectangle, Color color, LayoutManager layout) {
         final JPanel panel = new JPanel();
         panel.setBounds(rectangle);
         panel.setBackground(color);
@@ -184,14 +173,14 @@ class Main {
      * @return The created JFrame.
      */
     private static JFrame createFrame() {
-        final int app_width = screen_width/2;
-        final int app_height = screen_height/2;
+        final int app_width = SCREEN_WIDTH/2;
+        final int app_height = SCREEN_HEIGHT/2;
         final JFrame frame =  new JFrame();
         JFrame.setDefaultLookAndFeelDecorated(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Kevin POS");
         frame.setSize(app_width, app_height);
-        frame.setLocation(screen_width-app_width-(app_width/2), screen_height-app_height-(app_height/2)); // centers the app
+        frame.setLocation(SCREEN_WIDTH-app_width-(app_width/2), SCREEN_HEIGHT-app_height-(app_height/2)); // centers the app
         return frame;
 	}
 	
@@ -202,6 +191,24 @@ class Main {
             billItem.setForeground(Color.WHITE);
             rightPanel.add(billItem);
         }
+    }
+
+
+
+
+    /****************************** finished *********************/
+
+    /** This function will calculate and return the date 21 years ago from today.
+     * @return The date 21 years ago.
+     */
+    private static String getOldEnoughDate() {
+        Date today = new Date();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(today);
+        calendar.add(Calendar.YEAR, -21);
+        Date old_enough = calendar.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy");
+        return sdf.format(old_enough);
     }
 
     /** This function will set the whole menu.
