@@ -3,7 +3,7 @@ package src.main.java;
  * @author Kevin J. Kelly
  * @version 2.5
  */
-class Drink extends MenuItem {
+public class Drink extends MenuItem {
 	/**
 	 * To indicate if the drink is alcoholic or not.
 	 * Will require id if so.

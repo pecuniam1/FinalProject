@@ -3,7 +3,9 @@ package src.main.java;
  * @author Kevin J. Kelly
  * @version 2.0
  */
-class MenuItemFactory {
+public class MenuItemFactory {
+
+    public MenuItemFactory() {}
 
 	/**
 	 * This is the factory return method.

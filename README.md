@@ -5,15 +5,16 @@ The entry point is Main.java
 ### [Click here for the github page](https://github.com/pecuniam1/FinalProject)
 
 ### Total Files
-| File Name | Description |
-| --------- | ----------- |
-| .gitignore | This little guy? I wouldn\'t worry about this little guy |
-| Main.java | The entry point where the main method is |
-| Drink.java | Defines a drink object which is a child of MenuItem |
-| Food.java | Defines a food object which is a child of MenuItem |
-| MenuItem.java | The superclass for all menu items |
-| MenuItemFactory.java | This factory builds all of the MenuItem items |
-| README.md | You\'re reading this right now, so you know what this is. If not, see README.md |
+| File Name | Location | Description |
+| --------- | -------- | ------------|
+| .gitignore | / | This little guy? I wouldn\'t worry about this little guy |
+| Main.java | /src/main/java/ | The entry point where the main method is |
+| Drink.java | /src/main/java/ | Defines a drink object which is a child of MenuItem |
+| Food.java | /src/main/java/ | Defines a food object which is a child of MenuItem |
+| MenuItem.java | /src/main/java/ | The superclass for all menu items |
+| MenuItemFactory.java | /src/main/java/ | This factory builds all of the MenuItem items |
+| MyTestRunner.java | /src/test/java/ | The class I use for unit testing.
+| README.md | / | You\'re reading this right now, so you know what this is. If not, see README.md |
 
 ### Notes
 ***
