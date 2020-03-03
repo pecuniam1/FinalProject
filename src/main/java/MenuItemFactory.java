@@ -1,3 +1,4 @@
+package src.main.java;
 /** This is the MenuItemFactory. It produces all of the MenuItem objects.
  * @author Kevin J. Kelly
  * @version 2.0

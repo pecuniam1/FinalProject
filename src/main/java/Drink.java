@@ -1,3 +1,4 @@
+package src.main.java;
 /** This is the Drink class that extends from MenuItem and defines all drinks.
  * @author Kevin J. Kelly
  * @version 2.5
