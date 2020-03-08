@@ -125,8 +125,7 @@ class KevinProgram implements ActionListener {
         String choice = ae.getActionCommand();
         switch (choice) {
             case "Complete":
-                OrderCheckout check = new OrderCheckout();
-                check.checkout(itemsOrderedArray);
+                OrderCheckout.checkout(itemsOrderedArray);
                 setOKToDrink(false);
                 break;
             case "Cancel":
@@ -146,6 +145,6 @@ class KevinProgram implements ActionListener {
      * @param args
      */
     public static void main(final String args[]) {
-        KevinProgram kp = new KevinProgram();
+       new KevinProgram();
     }
 }

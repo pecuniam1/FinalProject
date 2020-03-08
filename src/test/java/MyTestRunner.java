@@ -1,22 +1,13 @@
 package src.test.java;
 
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import src.main.java.MenuItem;
-import src.main.java.MenuItemFactory;
 import src.main.java.Drink;
 import src.main.java.Food;
 
 import org.junit.jupiter.api.Test;
 
-import jdk.jfr.Timestamp;
-
 class MyTestRunner {
-
-    private final MenuItemFactory factory = new MenuItemFactory();
     
     @Test
     void groupedAssertions() { // all executed together

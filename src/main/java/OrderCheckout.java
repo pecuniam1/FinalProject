@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 class OrderCheckout {
 
-    public void checkout(ArrayList<MenuItem> itemsOrderedArray) {
+    public static void checkout(ArrayList<MenuItem> itemsOrderedArray) {
 
         // first create the frame
         JFrame frame = new JFrame();
