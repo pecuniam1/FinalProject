@@ -1,11 +1,6 @@
 package src.main.java;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.awt.*;
 
 import javax.swing.*;
@@ -22,23 +17,18 @@ public class ViewBuilder {
 
     public ViewBuilder() {}
 
-    // public ArrayList<String> addPrices(ArrayList<MenuItem> items) {
-    //     ArrayList<String> pricesArray = new ArrayList<>();
-    //     float totalPrice = 0f;
-    //     float totalPriceAfterTaxes = 0f;
-    //     float totalTax = 0f;
-    //     for (MenuItem item : items) {
-    //         totalPrice += item.getCost();
-    //     }
-    //     totalTax = totalPrice * KevinProgram.TAX_PERCENT;
-    //     totalPriceAfterTaxes = totalTax + totalPrice;
-
-    //     pricesArray.clear();
-    //     pricesArray.add(String.format("Pre Tax ........     $%.2f", totalPrice));
-    //     pricesArray.add(String.format("Tax ..............     $%.2f", totalTax));
-    //     pricesArray.add(String.format("Post Tax ......     $%.2f", totalPriceAfterTaxes));
-    //     return pricesArray;
-    // }
+    public String[] getReceipt(String type) {
+        String[] returnText = {"error"};
+        switch (type) {
+            case "header":
+                String[] header = {"Kevin Kellys Cookery House", "1025 Anyroad Dr", "Bolingbrook IL 60440", "630-756-5652","      ", "We will see you next Time!", "**************"};
+                return header;
+            case "footer":
+                String[] footer = {"**************", "Open Mon-Fri 8am-7pm", "Sat 8am-10pm", "Closed Sundays"};
+                return footer;
+        }
+        return returnText;
+    }
 
 	/** This function creates the right, left, and bottm panels that hold the bill, order buttons, and execute buttons.
 	 * @param rectangle The dimensions of the panel.

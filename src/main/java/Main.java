@@ -19,19 +19,20 @@ class KevinProgram implements ActionListener {
     public static ArrayList<MenuItem> totalMenuItems = new ArrayList<MenuItem>();
     private static boolean OLD_ENOUGH;
     private static JPanel PRICE_PANEL = new JPanel();
+    private static JPanel BILL_PANEL = new JPanel();
 
     public KevinProgram() {
         totalMenuItems = MenuProvider.getFullMenu();
         ViewBuilder view = new ViewBuilder();
         JFrame frame = view.createFrame();
         JPanel leftPanel = view.createPanel(new Rectangle(0, 0, 720, 500), Color.RED, new FlowLayout(FlowLayout.LEFT));
-        JPanel rightPanel = view.createPanel(new Rectangle(720, 0, 220, 400), Color.BLUE, new GridLayout(4, 1));
+        KevinProgram.BILL_PANEL = view.createPanel(new Rectangle(720, 0, 220, 400), Color.WHITE, new FlowLayout(FlowLayout.CENTER));
         KevinProgram.PRICE_PANEL = view.createPanel(new Rectangle(720, 400, 220, 50), Color.MAGENTA, new GridLayout(3, 0));
         JPanel bottomPanel = view.createPanel(new Rectangle(720, 450, 220, 50), Color.GREEN, new FlowLayout());
         
         // pricing add buttons
-        JButton cancel_button = view.createButton("Cancel Order", KevinProgram.CANCEL_ORDER, bottomPanel);
-        JButton close_out = view.createButton("Close Order", KevinProgram.CHECK_OUT, bottomPanel);
+        JButton cancel_button = view.createButton("Cancel", KevinProgram.CANCEL_ORDER, bottomPanel);
+        JButton close_out = view.createButton("Complete", KevinProgram.CHECK_OUT, bottomPanel);
         cancel_button.addActionListener(this);
         close_out.addActionListener(this);
         bottomPanel.add(cancel_button);
@@ -64,32 +65,28 @@ class KevinProgram implements ActionListener {
         buildPricePanel();
 
         // add panels to frame
-        frame.add(rightPanel);
+        frame.add(KevinProgram.BILL_PANEL);
         frame.add(leftPanel);
         frame.add(KevinProgram.PRICE_PANEL);
         frame.add(bottomPanel);
         frame.setLayout(null);
         frame.setVisible(true);
 
-        // itemizeBill(itemsOrderedArray, rightPanel);
+    }
 
-        // add list to rightPanel.
-        // rightPanel.add(new JLabel("name", JLabel.LEFT));
-
-        // does not work
-
-        // add stuff to right layout
-        // final DefaultListModel<String> li = new DefaultListModel<>();
-        // li.addElement(hamburger.toString());
-        // li.addElement(beer.toString());
-        // JList<String> list = new JList<>(li);
-        // list.setBounds(0,0,0,0);
-        // rightPanel.add(list);
-
+    private void buildBillPanel() {
+        resetPanel(KevinProgram.BILL_PANEL);
+        String array[] = new String[itemsOrderedArray.size()];
+        for (int x = 0; x < itemsOrderedArray.size(); x++) {
+            array[x] = (itemsOrderedArray.get(x).toString());
+        }
+        JList<String> list = new JList<String>(array);
+        KevinProgram.BILL_PANEL.add(list);
     }
 
     public void buildPricePanel() {
-        resetPricePanel();
+        buildBillPanel();
+        resetPanel(KevinProgram.PRICE_PANEL);
         ArrayList<String> pricesArray = new ArrayList<>();
         float totalPrice = 0f;
         float totalPriceAfterTaxes = 0f;
@@ -109,32 +106,11 @@ class KevinProgram implements ActionListener {
             KevinProgram.PRICE_PANEL.add(label);
         }
     }
-    
-    public void orderItem() {
-        //resetPricePanel();
-        ViewBuilder view = new ViewBuilder();
-        //ArrayList<String> menuItems = view.addPrices(MenuProvider.getFullMenu());
-        // for (String price : menuItems) {
-        //     JLabel label = new JLabel(price);
-        //     label.setFont(new Font("Arial", Font.PLAIN, 18));
-        //     KevinProgram.PRICE_PANEL.add(label);
-        // }
-    }
 
-    private void resetPricePanel() {
-        KevinProgram.PRICE_PANEL.removeAll();
-        KevinProgram.PRICE_PANEL.revalidate();
-        KevinProgram.PRICE_PANEL.repaint();
-    }
-
-	
-    
-    private static void itemizeBill(ArrayList<String> itemsOrderedArray, JPanel rightPanel) {
-        for(String food : itemsOrderedArray) {
-            JLabel billItem = new JLabel(food, JLabel.CENTER);
-            billItem.setForeground(Color.WHITE);
-            rightPanel.add(billItem);
-        }
+    private void resetPanel(JPanel panel) {
+        panel.removeAll();
+        panel.revalidate();
+        panel.repaint();
     }
 
     /**
@@ -152,11 +128,12 @@ class KevinProgram implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         String choice = ae.getActionCommand();
         switch (choice) {
-            case "Close Order":
-                // close order
+            case "Complete":
+                OrderCheckout check = new OrderCheckout();
+                check.checkout(itemsOrderedArray);
                 setOKToDrink(false);
                 break;
-            case "Cancel Order":
+            case "Cancel":
                 JOptionPane.showMessageDialog(null, "Order Cancelled");
                 itemsOrderedArray.clear();
                 buildPricePanel();

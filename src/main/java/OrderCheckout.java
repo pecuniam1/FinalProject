@@ -1,18 +1,12 @@
 package src.main.java;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-class OrderCheckout implements ActionListener {
+class OrderCheckout {
 
-    public OrderCheckout() {
-        checkout();
-    }
-
-    public void checkout() {
-        System.out.println("Checking out!");
-        Popup p; // create a frame
+    public void checkout(ArrayList<MenuItem> itemsOrderedArray) {
 
         // first create the frame
         JFrame frame = new JFrame();
@@ -25,33 +19,46 @@ class OrderCheckout implements ActionListener {
 
         //next create the panel
         ViewBuilder view = new ViewBuilder();
-        JPanel panel = view.createPanel(new Rectangle(0, 0, app_width/4, app_height), Color.RED, new FlowLayout());
+        JPanel panel = view.createPanel(new Rectangle(0, 0, app_width/4, app_height), Color.WHITE, new FlowLayout(FlowLayout.CENTER));
 
-        // add panel to frame
-        // frame.add(panel);
-        // frame.setLayout(null);
+        frame.setSize(app_width/4, app_height);
+        String[] header = view.getReceipt("header");
+        String[] footer = view.getReceipt("footer");
+        String array[] = new String[itemsOrderedArray.size()];
+        for (int x = 0; x < itemsOrderedArray.size(); x++) {
+            array[x] = (itemsOrderedArray.get(x).toString());
+        }
+        ArrayList<String> pricesArray = new ArrayList<>();
+        float totalPrice = 0f;
+        float totalPriceAfterTaxes = 0f;
+        float totalTax = 0f;
+        for (MenuItem item : itemsOrderedArray) {
+            totalPrice += item.getCost();
+        }
+        totalTax = totalPrice * KevinProgram.TAX_PERCENT;
+        totalPriceAfterTaxes = totalTax + totalPrice;
+        pricesArray.clear();
+        pricesArray.add(String.format("Pre Tax ........     $%.2f", totalPrice));
+        pricesArray.add(String.format("Tax ..............     $%.2f", totalTax));
+        pricesArray.add(String.format("Post Tax ......     $%.2f", totalPriceAfterTaxes));
+
+        //convert pricesArray ArrayList to array
+        String prices[] = new String[pricesArray.size()];
+        for (int x = 0; x < pricesArray.size(); x++) {
+            prices[x] = (pricesArray.get(x).toString());
+        }
+
+        JList<String> headerList = new JList<String>(header);
+        JList<String> itemList = new JList<String>(array);
+        JList<String> pricesList = new JList<String>(prices);
+        JList<String> footerList = new JList<String>(footer);
+        panel.add(headerList);
+        panel.add(itemList);
+        panel.add(pricesList);
+        panel.add(footerList);
+
+        frame.add(panel);
+        frame.setLayout(null);
         frame.setVisible(true);
-
-        // create popup
-        PopupFactory pf = new PopupFactory();
-        
-        // create a popup
-        p = pf.getPopup(frame, panel, 180, 100);
-        
-        // create a button
-        JButton b = new JButton("click");
-        b.addActionListener(this);
-        
-        // create a panel
-        // JPanel p1 = new JPanel();
-        
-        // p1.add(b);
-        // frame.add(p1);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
-
     }
 }
