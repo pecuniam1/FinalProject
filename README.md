@@ -9,8 +9,13 @@ The entry point is Main.java
 | --------- | -------- | ------------|
 | Factory | src/main/javaMenuItemFactory | This is the factory that builds all of the menu items. |
 | Inheritance | src/main/java/MenuItem | Drink and Food are children of this class. |
-| Iterator | src/main/MenuItemIterator | The iterator for MenuItems. This makes it so I can just loop through MenuItems. |
-| Singleton | src/main/OrderCheckout | The only method here is static. |
+| Iterator | src/main/java/MenuItemIterator | The iterator for MenuItems. This makes it so I can just loop through MenuItems. |
+| Singleton | src/main/java/OrderCheckout | The only method here is static. |
+
+### Unit Tests
+| File | Location |
+| ---- | -------- |
+| MyTestRunner | test/main/java
 
 ## Reflections
 ---
