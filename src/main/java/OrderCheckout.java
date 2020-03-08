@@ -16,15 +16,16 @@ class OrderCheckout implements ActionListener {
 
         // first create the frame
         JFrame frame = new JFrame();
-        final int app_width = Main.SCREEN_WIDTH/2;
-        final int app_height = Main.SCREEN_HEIGHT/2;
+        final int app_width = ViewBuilder.SCREEN_WIDTH/2;
+        final int app_height = ViewBuilder.SCREEN_HEIGHT/2;
         JFrame.setDefaultLookAndFeelDecorated(true);
         frame.setTitle("Close Out Order");
         frame.setSize(app_width/4, app_height);
-        frame.setLocation(Main.SCREEN_WIDTH-app_width-(app_width/8), Main.SCREEN_HEIGHT-app_height-(app_height/2)); // centers the app
+        frame.setLocation(ViewBuilder.SCREEN_WIDTH-app_width-(app_width/8), ViewBuilder.SCREEN_HEIGHT-app_height-(app_height/2)); // centers the app
 
         //next create the panel
-        JPanel panel = Main.createPanel(new Rectangle(0, 0, app_width/4, app_height), Color.RED, new FlowLayout());
+        ViewBuilder view = new ViewBuilder();
+        JPanel panel = view.createPanel(new Rectangle(0, 0, app_width/4, app_height), Color.RED, new FlowLayout());
 
         // add panel to frame
         // frame.add(panel);

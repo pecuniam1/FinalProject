@@ -10,42 +10,63 @@ import java.awt.*;
 
 import javax.swing.*;
 
-class Main {
-    public static int SCREEN_WIDTH = 1920;
-    public static int SCREEN_HEIGHT = 1080;
-    private static final int CANCEL_ORDER = 0;
-    private static final int CHECK_OUT = 1;
-    private static final float TAX_PERCENT = 0.035f;
-    private static ArrayList<MenuItem> itemsOrderedArray = new ArrayList<MenuItem>();
-    private static ArrayList<MenuItem> totalMenuItems = new ArrayList<MenuItem>();
-    private static ArrayList<String> pricesArray = new ArrayList<>();
+class KevinProgram implements ActionListener {
+    public static String APP_NAME = "Kevin Point O\'Sale";
+    public static final int CANCEL_ORDER = 0;
+    public static final int CHECK_OUT = 1;
+    public static final float TAX_PERCENT = 0.035f;
+    public static ArrayList<MenuItem> itemsOrderedArray = new ArrayList<MenuItem>();
+    public static ArrayList<MenuItem> totalMenuItems = new ArrayList<MenuItem>();
+    private static boolean OLD_ENOUGH;
+    private static JPanel PRICE_PANEL = new JPanel();
 
+    public KevinProgram() {
+        totalMenuItems = MenuProvider.getFullMenu();
+        ViewBuilder view = new ViewBuilder();
+        JFrame frame = view.createFrame();
+        JPanel leftPanel = view.createPanel(new Rectangle(0, 0, 720, 500), Color.RED, new FlowLayout(FlowLayout.LEFT));
+        JPanel rightPanel = view.createPanel(new Rectangle(720, 0, 220, 400), Color.BLUE, new GridLayout(4, 1));
+        KevinProgram.PRICE_PANEL = view.createPanel(new Rectangle(720, 400, 220, 50), Color.MAGENTA, new GridLayout(3, 0));
+        JPanel bottomPanel = view.createPanel(new Rectangle(720, 450, 220, 50), Color.GREEN, new FlowLayout());
+        
+        // pricing add buttons
+        JButton cancel_button = view.createButton("Cancel Order", KevinProgram.CANCEL_ORDER, bottomPanel);
+        JButton close_out = view.createButton("Close Order", KevinProgram.CHECK_OUT, bottomPanel);
+        cancel_button.addActionListener(this);
+        close_out.addActionListener(this);
+        bottomPanel.add(cancel_button);
+        bottomPanel.add(close_out);
 
-    public static void main(final String args[]) {
-        getGUI();
-    }
+        // add menu items to left panel        
+        for (MenuItem item : totalMenuItems) {
+            JButton button = view.createButton(item);
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (item.isAlcohol()) {
+                        if (getOKToDrink() == false) {
+                            String date = Drink.getOldEnoughDate();
+                            int input = JOptionPane.showConfirmDialog(null, "Was this person born on or after " + date + "?");
+                            if (input != 0) { // 0 = yes
+                                return;
+                            }
+                            setOKToDrink(true);
+                        }
+                    }
+                    itemsOrderedArray.add(item);
+                    buildPricePanel();
+                    System.out.println(item);
+                }
+            });
+            leftPanel.add(button);
+        };
 
-    private static void getGUI() {
-        getFullMenu();
-        JFrame frame = createFrame();
-
-        JPanel leftPanel = createPanel(new Rectangle(0, 0, 720, 500), Color.RED, new FlowLayout(FlowLayout.LEFT));
-        JPanel rightPanel = createPanel(new Rectangle(720, 0, 220, 400), Color.BLUE, new GridLayout(4, 1));
-        JPanel pricePanel = createPanel(new Rectangle(720, 400, 220, 50), Color.MAGENTA, new GridLayout(3, 0));
-        JPanel bottomPanel = createPanel(new Rectangle(720, 450, 220, 50), Color.GREEN, new FlowLayout());
-        populateMenu(leftPanel, pricePanel);
-
-        // add buttons
-        addBottomButton("Cancel Order", Main.CANCEL_ORDER, bottomPanel, pricePanel);
-        addBottomButton("Close Out", Main.CHECK_OUT, bottomPanel, pricePanel);
-
-        // add stuff to price panel
-        addPrices(pricePanel);
+        buildPricePanel();
 
         // add panels to frame
         frame.add(rightPanel);
         frame.add(leftPanel);
-        frame.add(pricePanel);
+        frame.add(KevinProgram.PRICE_PANEL);
         frame.add(bottomPanel);
         frame.setLayout(null);
         frame.setVisible(true);
@@ -64,24 +85,20 @@ class Main {
         // JList<String> list = new JList<>(li);
         // list.setBounds(0,0,0,0);
         // rightPanel.add(list);
+
     }
 
-    /** This function updates the total prices.
-     * @param panel The panel being updated (pricePanel in this case).
-     */
-    private static void addPrices(JPanel panel) {
-        panel.removeAll();
-        panel.revalidate();
-        panel.repaint();
+    public void buildPricePanel() {
+        resetPricePanel();
+        ArrayList<String> pricesArray = new ArrayList<>();
         float totalPrice = 0f;
         float totalPriceAfterTaxes = 0f;
         float totalTax = 0f;
         for (MenuItem item : itemsOrderedArray) {
             totalPrice += item.getCost();
         }
-        totalTax = totalPrice * Main.TAX_PERCENT;
+        totalTax = totalPrice * KevinProgram.TAX_PERCENT;
         totalPriceAfterTaxes = totalTax + totalPrice;
-
         pricesArray.clear();
         pricesArray.add(String.format("Pre Tax ........     $%.2f", totalPrice));
         pricesArray.add(String.format("Tax ..............     $%.2f", totalTax));
@@ -89,101 +106,27 @@ class Main {
         for (String price : pricesArray) {
             JLabel label = new JLabel(price);
             label.setFont(new Font("Arial", Font.PLAIN, 18));
-            panel.add(label);
+            KevinProgram.PRICE_PANEL.add(label);
         }
-    }
-
-    private static void populateMenu(JPanel leftPanel, JPanel pricePanel) {
-        for (MenuItem item : totalMenuItems) {
-            System.out.println(item);
-            addMenuButton(item, leftPanel, pricePanel);
-            // addPrices(pricePanel);
-        }
-    }
-
-    /**
-     * This function adds the menu buttons to the left panel.
-     * 
-     * @param item The item being added.
-     */
-    private static void addMenuButton(MenuItem item, JPanel panel, JPanel pricePanel) {
-        JButton button = new JButton(item.getName());
-        button.setMargin(new Insets(10, 20, 10, 20));
-        button.setFont(new Font("Arial", Font.PLAIN, 30));
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (item.isAlcohol()) {
-                    String date = getOldEnoughDate();
-                    int input = JOptionPane.showConfirmDialog(null, "Was this person born on or after " + date + "?");
-                    if (input != 0) { // 0 = yes
-                        return;
-                    }
-                }
-                itemsOrderedArray.add(item);
-                addPrices(pricePanel);
-                System.out.println(item);
-            }
-        });
-        panel.add(button);
     }
     
-
-    /** This function creates the buttons.
-     * 
-     * @param label The button lable.
-     * @param panel The panel to which the buttons are being added.
-     */
-    private static void addBottomButton(String label, int button_type, JPanel bottomPanel, JPanel pricePanel) {
-        JButton button = new JButton(label);
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                switch (button_type) {
-                    case Main.CHECK_OUT:
-                        new OrderCheckout();
-                        break;
-                    case Main.CANCEL_ORDER:
-                        itemsOrderedArray.clear();
-                        addPrices(pricePanel);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-        bottomPanel.add(button);
+    public void orderItem() {
+        //resetPricePanel();
+        ViewBuilder view = new ViewBuilder();
+        //ArrayList<String> menuItems = view.addPrices(MenuProvider.getFullMenu());
+        // for (String price : menuItems) {
+        //     JLabel label = new JLabel(price);
+        //     label.setFont(new Font("Arial", Font.PLAIN, 18));
+        //     KevinProgram.PRICE_PANEL.add(label);
+        // }
     }
 
-	/** This function creates the right, left, and bottm panels that hold the bill, order buttons, and execute buttons.
-	 * @param rectangle The dimensions of the panel.
-	 * @param color The color of the panel.
-	 * @param layout The layout of the panel.
-	 * @return The new panel.
-	 */
-    public static JPanel createPanel(Rectangle rectangle, Color color, LayoutManager layout) {
-        final JPanel panel = new JPanel();
-        panel.setBounds(rectangle);
-        panel.setBackground(color);
-        panel.setOpaque(true);
-        panel.setLayout(layout);
-        return panel;
+    private void resetPricePanel() {
+        KevinProgram.PRICE_PANEL.removeAll();
+        KevinProgram.PRICE_PANEL.revalidate();
+        KevinProgram.PRICE_PANEL.repaint();
     }
 
-    /** This function creates the frame that the application lives in.
-     * @return The created JFrame.
-     */
-    private static JFrame createFrame() {
-        final int app_width = SCREEN_WIDTH/2;
-        final int app_height = SCREEN_HEIGHT/2;
-        final JFrame frame =  new JFrame();
-        JFrame.setDefaultLookAndFeelDecorated(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("Kevin POS");
-        frame.setSize(app_width, app_height);
-        frame.setLocation(SCREEN_WIDTH-app_width-(app_width/2), SCREEN_HEIGHT-app_height-(app_height/2)); // centers the app
-        return frame;
-	}
 	
     
     private static void itemizeBill(ArrayList<String> itemsOrderedArray, JPanel rightPanel) {
@@ -194,41 +137,42 @@ class Main {
         }
     }
 
-
-
-
-    /****************************** finished *********************/
-
-    /** This function will calculate and return the date 21 years ago from today.
-     * @return The date 21 years ago.
+    /**
+     * Sets the age back to zero after transaction is finished.
      */
-    private static String getOldEnoughDate() {
-        Date today = new Date();
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(today);
-        calendar.add(Calendar.YEAR, -21);
-        Date old_enough = calendar.getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy");
-        return sdf.format(old_enough);
+    private static void setOKToDrink(boolean ok) {
+        KevinProgram.OLD_ENOUGH = ok;
     }
 
-    /** This function will set the whole menu.
-     * This function mimics what would happen if I were
-     * querying a database, but it would be in a loop.
-     * It is populating the totalMenuItems ArrayList.
-    */
-    private static void getFullMenu() {
-        MenuItemFactory factory = new MenuItemFactory();
-        totalMenuItems.add(factory.getMenuItem("Hot Dog", 2.99f, MenuItem.FOOD));
-        totalMenuItems.add(factory.getMenuItem("Hamburger", 3.79f, MenuItem.FOOD));
-        totalMenuItems.add(factory.getMenuItem("Gyros", 4.29f, MenuItem.FOOD));
-        totalMenuItems.add(factory.getMenuItem("Pepsi", 1.99f, MenuItem.SOFT_DRINK));
-        totalMenuItems.add(factory.getMenuItem("Diet Pepsi", 1.99f, MenuItem.SOFT_DRINK));
-        totalMenuItems.add(factory.getMenuItem("Sprite", 1.99f, MenuItem.SOFT_DRINK));
-        totalMenuItems.add(factory.getMenuItem("Regular Coffee", 2.49f, MenuItem.SOFT_DRINK));
-        totalMenuItems.add(factory.getMenuItem("Decafe Coffee", 2.49f, MenuItem.SOFT_DRINK));
-        totalMenuItems.add(factory.getMenuItem("Beer", 5.99f, MenuItem.ALCOHOL));
-        totalMenuItems.add(factory.getMenuItem("Red Wine", 7.99f, MenuItem.ALCOHOL));
-        totalMenuItems.add(factory.getMenuItem("White Wine", 7.99f, MenuItem.ALCOHOL));
+    private static boolean getOKToDrink() {
+        return KevinProgram.OLD_ENOUGH;
+    }
+
+
+    public void actionPerformed(ActionEvent ae) {
+        String choice = ae.getActionCommand();
+        switch (choice) {
+            case "Close Order":
+                // close order
+                setOKToDrink(false);
+                break;
+            case "Cancel Order":
+                JOptionPane.showMessageDialog(null, "Order Cancelled");
+                itemsOrderedArray.clear();
+                buildPricePanel();
+                setOKToDrink(false);
+                break;
+            default:
+                buildPricePanel();
+                break;
+        }
+    }
+
+    /**
+     * Then entry for this program.
+     * @param args
+     */
+    public static void main(final String args[]) {
+        KevinProgram kp = new KevinProgram();
     }
 }

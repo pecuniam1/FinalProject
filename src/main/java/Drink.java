@@ -1,5 +1,13 @@
 package src.main.java;
-/** This is the Drink class that extends from MenuItem and defines all drinks.
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+/**
+ * This is the Drink class that extends from MenuItem and defines all drinks.
+ * 
  * @author Kevin J. Kelly
  * @version 2.5
  */
@@ -26,5 +34,18 @@ public class Drink extends MenuItem {
 
     public boolean isAlcohol() {
         return this.isAlcohol;
+    }
+    
+    /** This function will calculate and return the date 21 years ago from today.
+     * @return The date 21 years ago.
+     */
+    public static String getOldEnoughDate() {
+        Date today = new Date();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(today);
+        calendar.add(Calendar.YEAR, -21);
+        Date old_enough = calendar.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy");
+        return sdf.format(old_enough);
     }
 }
