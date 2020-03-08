@@ -4,24 +4,18 @@ The entry point is Main.java
 
 ### [Click here for the github page](https://github.com/pecuniam1/FinalProject)
 
-### Total Files
-| File Name | Location | Description |
+### Design Patterns
+| Pattern | Class | Description |
 | --------- | -------- | ------------|
-| .gitignore | / | This little guy? I wouldn\'t worry about this little guy |
-| Main.java | /src/main/java/ | The entry point where the main method is |
-| Drink.java | /src/main/java/ | Defines a drink object which is a child of MenuItem |
-| Food.java | /src/main/java/ | Defines a food object which is a child of MenuItem |
-| MenuItem.java | /src/main/java/ | The superclass for all menu items |
-| MenuItemFactory.java | /src/main/java/ | This factory builds all of the MenuItem items |
-| MyTestRunner.java | /src/test/java/ | The class I use for unit testing.
-| README.md | / | You\'re reading this right now, so you know what this is. If not, see README.md |
+| Factory | src/main/javaMenuItemFactory | This is the factory that builds all of the menu items. |
+| Inheritance | src/main/java/MenuItem | Drink and Food are children of this class. |
+| Iterator | src/main/MenuItemIterator | The iterator for MenuItems. This makes it so I can just loop through MenuItems. |
 
-### Notes
-***
-I was going to spend some time creating an app that was perfectly centered for any screen size, but that isn't the point of this exercise, and I was spending too much time on it, so if you need to change the resolution to match your screen (I can\'t image why you would), in Main.java, lines 9 and 10:
-```java
-private static int screen_width = 1920;
-private static int screen_height = 1080;
-```
-***
-The ```getFullMenu()``` method will provide the menu items. In a live version, this would query the database for the menu items.
+## Reflections
+---
+### **What I found easy.**
+The easist part of designing this program was making reusable methods for small objects like JPanels. My first attempt at this program was one giant class that was difficult to really work through because all of the functionality was in one method and it was static. When something didn't work, I created small pieces of code that I knew would work (this would have been a great time to implement unit testing). I ended up taking most of those small pieces of code out and moving them to the ViewBuilder and the Factory.
+### **What I found difficult**
+Not using global variables. I tried so hard not to declare 2 JPanels as global objects, but I was spending too much time on it. Also, I found designing the view very cumbersome. I am so used to view templates, that I had forgotten how java has these built-in view objects. I had a hard time positioning and adding to the panels. I never did find a way to add large amounts of text to a panel without using either labels or textboxes.
+### **What I would do differently next time**
+Obviously besides making it look better, test-driven development. I would have started with small pieces of code, unit tested them, then put it in a class and move on. It\'s much easier to diagnose a problem in 5 lines of code instead of 200. Secondly, I would have tried to implement some kind of multi-threaded application. Even if it was as simple as calling all of the methods in the ViewBuilder at the same time. I\'ve never really programmed a mult-threaded application, and I would like some progress. Finally, I would have spent more time before it was due working on it. Even though I started working on this weeks ago, I never really felt motivated to *really* work on it until the last 2 weeks.

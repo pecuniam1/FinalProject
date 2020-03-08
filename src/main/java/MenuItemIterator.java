@@ -1,34 +1,26 @@
-// import java.util.Iterator;
+package src.main.java;
 
-// class MenuItemIterator<MenuItem> implements Iterable<MenuItem> {
-//     private MenuItem[] menuItemArray;
-//     private int size;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-//     public MenuItemIterator(MenuItem[] array) {
-//         this.menuItemArray = array;
-//         this.size = menuItemArray.length;
-//     }
+public class MenuItemIterator implements Iterator {
+    ArrayList<MenuItem> list;
+    int position = 0;
 
-//     @Override
-//     public Iterator<MenuItem> iterator() {
-//         Iterator<MenuItem> it = new Iterator<MenuItem>() {
-//             private int index = 0;
+    public MenuItemIterator(ArrayList<MenuItem> list) {
+        this.list = list;
+    }
 
-// 			@Override
-// 			public boolean hasNext() {
-// 				return index < size && menuItemArray[index] != null;
-// 			}
+    public boolean hasNext() {
+        return position > list.size();
+    }
 
-// 			@Override
-// 			public MenuItem next() {
-// 				return menuItemArray[index++];
-//             }
-            
-//             @Override
-//             public void remove() {
-//                 throw new UnsupportedOperationException();
-//             }
-//             return it;
-//         }
-//     }
-// }
+   public MenuItem next() {
+        return (MenuItem) list.get(position);
+   }
+
+   public void add(MenuItem mi) {
+       list.add(mi);
+       position++;
+   }
+}

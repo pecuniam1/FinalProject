@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/** Prepares the receipt
+ * @author Kevin J. Kelly
+ * @version 1.4
+ */
 class OrderCheckout {
 
     public void checkout(ArrayList<MenuItem> itemsOrderedArray) {
