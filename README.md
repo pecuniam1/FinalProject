@@ -1,5 +1,6 @@
 # FinalProject
-This is my final project.
+This is my final project for my class on Design Patterns. It is a Graduate-level course at Lewis University in Romeoville, IL.
+This is a mock register for a restaurant. It includes unit testing.
 The entry point is Main.java
 
 ### [Click here for the github page](https://github.com/pecuniam1/FinalProject)
